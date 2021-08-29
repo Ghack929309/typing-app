@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 function App() {
 	const TIME_STARTER = 10;
 	const [text, setText] = useState("");
 	const [timer, setTimer] = useState(TIME_STARTER);
 	const [countdown, setCountdown] = useState(false);
 	const [wpm, setWpm] = useState(0);
+	const textRef = useRef(null);
 
 	useEffect(() => {
 		if (timer > 0 && countdown) {
 			setTimeout(() => {
 				setTimer((time) => time - 1);
+				textRef.current.focus();
 			}, 1000);
 		} else if (timer === 0) {
 			endGame();
@@ -40,7 +42,12 @@ function App() {
 	return (
 		<div>
 			<h1>How fast do you type ?</h1>
-			<textarea value={text} onChange={handleChange} disabled={!countdown} />
+			<textarea
+				ref={textRef}
+				value={text}
+				onChange={handleChange}
+				disabled={!countdown}
+			/>
 			<h4>Time remaining:{timer}</h4>
 			<button onClick={startGame} disabled={countdown}>
 				Start
